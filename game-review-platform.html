@@ -1,0 +1,1617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GAME.WORTH - Game Review Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.3);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(168, 85, 247, 0.5);
+            border-radius: 6px;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            background: linear-gradient(to bottom right, #0f172a, #020617);
+            color: #ffffff;
+            overflow-x: hidden;
+            transition: background 0.15s ease, color 0.15s ease;
+        }
+
+        body.light-mode {
+            background: linear-gradient(to bottom right, #f8fafc, #f1f5f9);
+            color: #1e293b;
+        }
+
+        .background-container {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .gradient-1 {
+            position: absolute;
+            top: 0;
+            left: 25%;
+            width: 24rem;
+            height: 24rem;
+            background: radial-gradient(circle, rgba(168, 85, 247, 0.05) 0%, transparent 70%);
+            border-radius: 50%;
+            filter: blur(120px);
+        }
+
+        .gradient-2 {
+            position: absolute;
+            bottom: 0;
+            right: 25%;
+            width: 24rem;
+            height: 24rem;
+            background: radial-gradient(circle, rgba(34, 211, 238, 0.05) 0%, transparent 70%);
+            border-radius: 50%;
+            filter: blur(120px);
+        }
+
+        .content {
+            position: relative;
+            z-index: 10;
+        }
+
+        header {
+            border-bottom: 1px solid rgba(51, 65, 85, 0.5);
+            background: rgba(15, 23, 42, 0.5);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 20;
+            transition: transform 0.15s ease;
+        }
+
+        body.light-mode header {
+            background: rgba(248, 250, 252, 0.8);
+            border-bottom: 1px solid rgba(100, 116, 139, 0.3);
+        }
+
+        header.hidden {
+            transform: translateY(-100%);
+        }
+
+        main {
+            margin-top: 400px;
+        }
+
+        .header-inner {
+            max-width: 80rem;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        .header-title {
+            display: flex;
+            align-items: baseline;
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 900;
+            letter-spacing: -0.02em;
+            font-family: 'Courier New', monospace;
+            text-shadow: 0 0 30px rgba(168, 85, 247, 0.5);
+        }
+
+        .subtitle {
+            font-size: 1.25rem;
+            color: #a855f7;
+            font-weight: 300;
+        }
+
+        .search-container {
+            position: relative;
+            margin-bottom: 1rem;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 0.75rem;
+            width: 1.25rem;
+            height: 1.25rem;
+            color: #64748b;
+        }
+
+        #searchInput {
+            width: 100%;
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid rgba(51, 65, 85, 0.5);
+            border-radius: 0.5rem;
+            padding: 0.75rem 1rem 0.75rem 3rem;
+            color: #ffffff;
+            font-size: 1rem;
+            transition: all 0.15s ease;
+        }
+
+        body.light-mode #searchInput {
+            background: rgba(248, 250, 252, 0.7);
+            border: 1px solid rgba(100, 116, 139, 0.3);
+            color: #1e293b;
+        }
+
+        body.light-mode #searchInput::placeholder {
+            color: #94a3b8;
+        }
+
+        #searchInput::placeholder {
+            color: #64748b;
+        }
+
+        #searchInput:focus {
+            outline: none;
+            border-color: rgba(168, 85, 247, 0.5);
+            box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.1);
+        }
+
+        .filter-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .platform-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            border: 1px solid rgba(51, 65, 85, 0.5);
+            background: rgba(30, 41, 59, 0.5);
+            color: #cbd5e1;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        body.light-mode .filter-btn {
+            background: rgba(226, 232, 240, 0.8);
+            color: #475569;
+            border: 1px solid rgba(100, 116, 139, 0.3);
+        }
+
+        .filter-btn:hover {
+            background: rgba(51, 65, 85, 0.5);
+        }
+
+        body.light-mode .filter-btn:hover {
+            background: rgba(203, 213, 225, 0.8);
+        }
+
+        .filter-btn.active {
+            background: linear-gradient(to right, #a855f7, #ec4899);
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 10px 25px rgba(168, 85, 247, 0.3);
+        }
+
+        .platform-btn {
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            border: 1px solid rgba(51, 65, 85, 0.5);
+            background: rgba(30, 41, 59, 0.5);
+            color: #cbd5e1;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        body.light-mode .platform-btn {
+            background: rgba(226, 232, 240, 0.8);
+            color: #475569;
+            border: 1px solid rgba(100, 116, 139, 0.3);
+        }
+
+        .platform-btn:hover {
+            background: rgba(51, 65, 85, 0.5);
+        }
+
+        body.light-mode .platform-btn:hover {
+            background: rgba(203, 213, 225, 0.8);
+        }
+
+        .platform-btn.active {
+            background: linear-gradient(to right, #06b6d4, #0ea5e9);
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 10px 25px rgba(6, 182, 212, 0.3);
+        }
+
+        .sort-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .sort-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            border: 1px solid rgba(51, 65, 85, 0.5);
+            background: rgba(30, 41, 59, 0.5);
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .sort-btn:hover {
+            background: rgba(51, 65, 85, 0.5);
+        }
+
+        .theme-toggle {
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            border: 1px solid rgba(51, 65, 85, 0.5);
+            background: rgba(30, 41, 59, 0.5);
+            color: #cbd5e1;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        body.light-mode .theme-toggle {
+            background: rgba(226, 232, 240, 0.8);
+            color: #475569;
+            border: 1px solid rgba(100, 116, 139, 0.3);
+        }
+
+        .theme-toggle:hover {
+            background: rgba(51, 65, 85, 0.5);
+        }
+
+        body.light-mode .theme-toggle:hover {
+            background: rgba(203, 213, 225, 0.8);
+        }
+
+        main {
+            max-width: 80rem;
+            margin: 0 auto;
+            padding: 6rem 1.5rem 3rem 1.5rem;
+        }
+
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .games-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .games-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .game-card {
+            position: relative;
+            animation: fadeInUp 0.3s ease-out;
+            will-change: transform;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .game-card.delay-1 { animation-delay: 0.05s; }
+        .game-card.delay-2 { animation-delay: 0.1s; }
+        .game-card.delay-3 { animation-delay: 0.15s; }
+        .game-card.delay-4 { animation-delay: 0.2s; }
+        .game-card.delay-5 { animation-delay: 0.25s; }
+        .game-card.delay-6 { animation-delay: 0.3s; }
+        .game-card.delay-7 { animation-delay: 0.35s; }
+        .game-card.delay-8 { animation-delay: 0.4s; }
+        .game-card.delay-9 { animation-delay: 0.45s; }
+        .game-card.delay-10 { animation-delay: 0.5s; }
+
+        .card-inner {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(51, 65, 85, 0.5);
+            border-radius: 0.75rem;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            transition: border-color 0.15s ease;
+            position: relative;
+        }
+
+        body.light-mode .card-inner {
+            background: rgba(248, 250, 252, 0.9);
+            border: 1px solid rgba(100, 116, 139, 0.3);
+        }
+
+        .game-card:hover .card-inner {
+            border-color: rgba(51, 65, 85, 0.8);
+        }
+
+        body.light-mode .game-card:hover .card-inner {
+            border-color: rgba(100, 116, 139, 0.5);
+        }
+
+        .card-content {
+            padding: 1.5rem;
+            position: relative;
+        }
+
+        .verdict-badge {
+            position: absolute;
+            top: 0;
+            right: 0;
+            padding: 0.5rem 1rem;
+            font-size: 0.75rem;
+            font-weight: 900;
+            letter-spacing: 0.05em;
+            color: white;
+            background-size: 100% 100%;
+        }
+
+        .verdict-worth {
+            background: linear-gradient(to right, #10b981, #14b8a6);
+        }
+
+        .verdict-mixed {
+            background: linear-gradient(to right, #f59e0b, #f97316);
+        }
+
+        .verdict-skip {
+            background: linear-gradient(to right, #ef4444, #ec4899);
+        }
+
+        .game-title {
+            font-size: 1.5rem;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+            font-family: 'Courier New', monospace;
+            transition: color 0.3s ease;
+        }
+
+        .game-card:hover .game-title {
+            color: #d8b4fe;
+        }
+
+        body.light-mode .game-card:hover .game-title {
+            color: #a855f7;
+        }
+
+        .game-genre {
+            font-size: 0.875rem;
+            color: #94a3b8;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        body.light-mode .game-genre {
+            color: #64748b;
+        }
+
+        .game-platform {
+            font-size: 0.875rem;
+            color: #06b6d4;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        body.light-mode .game-platform {
+            color: #0891b2;
+        }
+
+        .game-description {
+            color: #cbd5e1;
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        body.light-mode .game-description {
+            color: #475569;
+        }
+
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .tag {
+            padding: 0.25rem 0.5rem;
+            background: rgba(30, 41, 59, 0.6);
+            color: #06b6d4;
+            font-size: 0.75rem;
+            font-weight: 600;
+            border-radius: 0.25rem;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        body.light-mode .tag {
+            background: rgba(203, 213, 225, 0.6);
+            color: #0891b2;
+        }
+
+        .rating-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(51, 65, 85, 0.5);
+            transition: border-color 0.3s ease;
+        }
+
+        body.light-mode .rating-row {
+            border-bottom: 1px solid rgba(100, 116, 139, 0.2);
+        }
+
+        .stars {
+            display: flex;
+            gap: 0.25rem;
+        }
+
+        .star {
+            width: 1rem;
+            height: 1rem;
+        }
+
+        .star.filled {
+            color: #facc15;
+        }
+
+        .star.empty {
+            color: #475569;
+        }
+
+        .rating-number {
+            font-size: 1.125rem;
+            font-weight: 900;
+            color: white;
+            margin-left: 0.5rem;
+        }
+
+        .review-count {
+            font-size: 0.75rem;
+            color: #64748b;
+            transition: color 0.3s ease;
+        }
+
+        body.light-mode .review-count {
+            color: #94a3b8;
+        }
+
+        .price-label {
+            color: #94a3b8;
+            font-size: 0.875rem;
+            transition: color 0.3s ease;
+        }
+
+        body.light-mode .price-label {
+            color: #64748b;
+        }
+
+        .price-value {
+            font-size: 1.125rem;
+            font-weight: 900;
+            color: #06b6d4;
+            transition: color 0.3s ease;
+        }
+
+        body.light-mode .price-value {
+            color: #0891b2;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 5rem 1.5rem;
+            color: #94a3b8;
+            font-size: 1.125rem;
+            transition: color 0.3s ease;
+        }
+
+        body.light-mode .no-results {
+            color: #64748b;
+        }
+
+        footer {
+            border-top: 1px solid rgba(51, 65, 85, 0.5);
+            margin-top: 5rem;
+            padding: 2rem;
+            text-align: center;
+            color: #64748b;
+            font-size: 0.875rem;
+            transition: border-color 0.3s ease, color 0.3s ease;
+        }
+
+        body.light-mode footer {
+            border-top: 1px solid rgba(100, 116, 139, 0.2);
+            color: #94a3b8;
+        }
+
+        svg {
+            width: 1.25rem;
+            height: 1.25rem;
+            display: inline-block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .details-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            z-index: 100;
+            overflow-y: auto;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .details-modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .details-content {
+            background: rgba(15, 23, 42, 0.95);
+            border: 1px solid rgba(51, 65, 85, 0.5);
+            border-radius: 1rem;
+            padding: 3rem;
+            max-width: 700px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: slideUp 0.2s ease;
+            position: relative;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #cbd5e1;
+            transition: color 0.3s ease;
+        }
+
+        body.light-mode .close-btn {
+            color: #475569;
+        }
+
+        .close-btn:hover {
+            color: #f1f5f9;
+        }
+
+        body.light-mode .close-btn:hover {
+            color: #1e293b;
+        }
+
+        .details-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 2rem;
+            gap: 2rem;
+        }
+
+        .details-title-section h2 {
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+            font-family: 'Courier New', monospace;
+        }
+
+        body.light-mode .details-title-section h2 {
+            color: #1e293b;
+        }
+
+        .details-verdict-badge {
+            padding: 0.75rem 1.5rem;
+            font-weight: 900;
+            letter-spacing: 0.05em;
+            color: white;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            align-self: flex-start;
+        }
+
+        .details-section {
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(51, 65, 85, 0.5);
+        }
+
+        body.light-mode .details-section {
+            border-bottom: 1px solid rgba(100, 116, 139, 0.2);
+        }
+
+        .details-section:last-child {
+            border-bottom: none;
+        }
+
+        .details-label {
+            font-size: 0.875rem;
+            color: #94a3b8;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+
+        body.light-mode .details-label {
+            color: #64748b;
+        }
+
+        .details-value {
+            font-size: 1.125rem;
+            color: #e2e8f0;
+            margin-bottom: 1rem;
+        }
+
+        body.light-mode .details-value {
+            color: #334155;
+        }
+
+        .details-rating {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .rating-display {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .rating-stars {
+            display: flex;
+            gap: 0.25rem;
+        }
+
+        .rating-stars .star {
+            width: 1.5rem;
+            height: 1.5rem;
+        }
+
+        .rating-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .stat-item {
+            background: rgba(30, 41, 59, 0.5);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            border: 1px solid rgba(51, 65, 85, 0.5);
+        }
+
+        body.light-mode .stat-item {
+            background: rgba(226, 232, 240, 0.5);
+            border: 1px solid rgba(100, 116, 139, 0.2);
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+
+        body.light-mode .stat-label {
+            color: #64748b;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: #06b6d4;
+        }
+
+        body.light-mode .stat-value {
+            color: #0891b2;
+        }
+
+        body.light-mode .details-value {
+            color: #334155;
+        }
+
+        .detailed-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .detailed-tag {
+            padding: 0.5rem 1rem;
+            background: rgba(30, 41, 59, 0.5);
+            color: #06b6d4;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            border: 1px solid rgba(6, 182, 212, 0.3);
+        }
+
+        body.light-mode .detailed-tag {
+            background: rgba(203, 213, 225, 0.5);
+            color: #0891b2;
+            border: 1px solid rgba(8, 145, 178, 0.3);
+        }
+
+        .game-card {
+            cursor: pointer;
+        }
+
+        .game-card {
+            transition: transform 0.15s ease;
+        }
+
+        .game-card:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Buy Links */
+        .buy-section {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(51, 65, 85, 0.5);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        body.light-mode .buy-section {
+            border-top: 1px solid rgba(100, 116, 139, 0.2);
+        }
+
+        .buy-btn {
+            flex: 1;
+            min-width: 150px;
+            padding: 1rem 1.5rem;
+            border-radius: 0.5rem;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .buy-btn-amazon {
+            background: linear-gradient(to right, #FF9900, #FFA500);
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 153, 0, 0.3);
+        }
+
+        .buy-btn-amazon:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 153, 0, 0.4);
+        }
+
+        .buy-btn-nintendo {
+            background: linear-gradient(to right, #E60012, #F0061B);
+            color: white;
+            box-shadow: 0 4px 15px rgba(230, 0, 18, 0.3);
+        }
+
+        .buy-btn-nintendo:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(230, 0, 18, 0.4);
+        }
+
+        .buy-btn-playstation {
+            background: linear-gradient(to right, #003087, #0066CC);
+            color: white;
+            box-shadow: 0 4px 15px rgba(0, 48, 135, 0.3);
+        }
+
+        .buy-btn-playstation:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 48, 135, 0.4);
+        }
+
+        .buy-btn-xbox {
+            background: linear-gradient(to right, #107C10, #1FB012);
+            color: white;
+            box-shadow: 0 4px 15px rgba(16, 124, 16, 0.3);
+        }
+
+        .buy-btn-xbox:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(16, 124, 16, 0.4);
+        }
+
+        .buy-btn-steam {
+            background: linear-gradient(to right, #1B2838, #2A475E);
+            color: white;
+            box-shadow: 0 4px 15px rgba(26, 40, 56, 0.3);
+            border: 1px solid rgba(108, 192, 228, 0.5);
+        }
+
+        .buy-btn-steam:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(108, 192, 228, 0.4);
+        }
+
+        .buy-btn-appstore {
+            background: linear-gradient(to right, #555555, #888888);
+            color: white;
+            box-shadow: 0 4px 15px rgba(85, 85, 85, 0.3);
+        }
+
+        .buy-btn-appstore:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(85, 85, 85, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <div class="background-container">
+        <div class="gradient-1"></div>
+        <div class="gradient-2"></div>
+    </div>
+
+    <div class="content">
+        <header>
+            <div class="header-inner">
+                <div class="header-title">
+                    <h1>GAME.WORTH</h1>
+                    <span class="subtitle">honest game reviews</span>
+                </div>
+
+                <div class="search-container">
+                    <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.35-4.35"></path>
+                    </svg>
+                    <input type="text" id="searchInput" placeholder="Search games...">
+                </div>
+
+                <div class="filter-buttons" id="filterButtons"></div>
+
+                <div class="platform-buttons" id="platformButtons"></div>
+
+                <div class="sort-buttons">
+                    <button class="sort-btn active" onclick="setSortBy('rating')">
+                        <span>⭐</span> Top Rated
+                    </button>
+                    <button class="sort-btn" onclick="setSortBy('reviews')">
+                        <span>📊</span> Most Reviewed
+                    </button>
+                    <button class="theme-toggle" onclick="toggleTheme()">
+                        🌙 Dark
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <main>
+            <div class="games-grid" id="gamesGrid"></div>
+            <div id="noResults" class="no-results" style="display: none;">
+                No games found matching your criteria
+            </div>
+        </main>
+
+        <!-- Game Details Modal -->
+        <div class="details-modal" id="detailsModal">
+            <div class="details-content">
+                <button class="close-btn" onclick="closeDetails()">✕</button>
+                <div class="details-header">
+                    <div class="details-title-section">
+                        <h2 id="detailsTitle"></h2>
+                        <p style="color: #94a3b8; margin-bottom: 1rem;" id="detailsGenre"></p>
+                        <p style="color: #06b6d4; font-weight: 600;" id="detailsPlatform"></p>
+                    </div>
+                    <div class="details-verdict-badge" id="detailsVerdictBadge"></div>
+                </div>
+
+                <div class="details-section">
+                    <div class="details-label">About</div>
+                    <p class="details-value" id="detailsDescription"></p>
+                </div>
+
+                <div class="details-section">
+                    <div class="details-label">Rating & Reviews</div>
+                    <div class="details-rating">
+                        <div class="rating-display">
+                            <div class="rating-stars" id="detailsStars"></div>
+                            <span style="font-size: 1.5rem; font-weight: 900; color: white;" id="detailsRatingNumber"></span>
+                        </div>
+                        <span style="color: #94a3b8;" id="detailsReviewCount"></span>
+                    </div>
+                </div>
+
+                <div class="details-section">
+                    <div class="details-label">Details</div>
+                    <div class="rating-stats">
+                        <div class="stat-item">
+                            <div class="stat-label">Price</div>
+                            <div class="stat-value" id="detailsPrice"></div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">Total Reviews</div>
+                            <div class="stat-value" id="detailsTotalReviews"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="details-section">
+                    <div class="details-label">Tags</div>
+                    <div class="detailed-tags" id="detailsTags"></div>
+                </div>
+
+                <div class="buy-section" id="buySection"></div>
+            </div>
+        </div>
+
+        <footer>
+            <p>&copy; 2024 GAME.WORTH. All rights reserved. | Game ratings and verdicts based on community feedback • Not affiliated with game publishers</p>
+        </footer>
+    </div>
+
+    <script>
+        const games = [
+            {
+                id: 1,
+                title: 'Elden Ring',
+                genre: 'Action RPG',
+                platform: 'Multi-Platform',
+                rating: 9.2,
+                reviews: 1247,
+                verdict: 'worth',
+                price: '$59.99',
+                description: 'Breathtaking open-world action RPG with stunning world design',
+                tags: ['Challenging', 'Story-Rich', 'Open World']
+            },
+            {
+                id: 2,
+                title: 'Cyberpunk 2077',
+                genre: 'Action RPG',
+                platform: 'PC/PlayStation/Xbox',
+                rating: 7.1,
+                reviews: 2341,
+                verdict: 'mixed',
+                price: '$59.99',
+                description: 'Ambitious cyberpunk adventure with great story but technical quirks',
+                tags: ['Story-Rich', 'Futuristic', 'Immersive']
+            },
+            {
+                id: 3,
+                title: 'Baldur\'s Gate 3',
+                genre: 'RPG',
+                platform: 'PC/PlayStation',
+                rating: 9.5,
+                reviews: 3421,
+                verdict: 'worth',
+                price: '$59.99',
+                description: 'Masterpiece of interactive storytelling with incredible freedom',
+                tags: ['Story-Rich', 'Deep Choices', 'Replayable']
+            },
+            {
+                id: 4,
+                title: 'Concord',
+                genre: 'Hero Shooter',
+                platform: 'PC/PlayStation/Xbox',
+                rating: 3.2,
+                reviews: 189,
+                verdict: 'skip',
+                price: 'Free',
+                description: 'Failed live-service experiment that never found its audience',
+                tags: ['Multiplayer', 'Live-Service', 'Forgettable']
+            },
+            {
+                id: 5,
+                title: 'Palworld',
+                genre: 'Adventure',
+                platform: 'PC/Xbox/Mobile',
+                rating: 8.1,
+                reviews: 2145,
+                verdict: 'worth',
+                price: '$29.99',
+                description: 'Creative monster-catching game with surprising depth and charm',
+                tags: ['Creatures', 'Crafting', 'Multiplayer']
+            },
+            {
+                id: 6,
+                title: 'Indiana Jones and the Great Circle',
+                genre: 'Action Adventure',
+                platform: 'PC/Xbox',
+                rating: 8.7,
+                reviews: 892,
+                verdict: 'worth',
+                price: '$69.99',
+                description: 'Immersive first-person adventure capturing the spirit perfectly',
+                tags: ['Adventure', 'Immersive', 'Cinematic']
+            },
+            {
+                id: 7,
+                title: 'Star Wars Outlaws',
+                genre: 'Action Adventure',
+                platform: 'PlayStation/PC',
+                rating: 6.8,
+                reviews: 1456,
+                verdict: 'mixed',
+                price: '$69.99',
+                description: 'Solid Star Wars experience held back by performance issues',
+                tags: ['Action', 'Story-Rich', 'Open World']
+            },
+            {
+                id: 8,
+                title: 'Black Myth: Wukong',
+                genre: 'Action RPG',
+                platform: 'PC/PlayStation',
+                rating: 8.9,
+                reviews: 4231,
+                verdict: 'worth',
+                price: '$69.99',
+                description: 'Challenging Asian action fantasy with phenomenal combat',
+                tags: ['Challenging', 'Gorgeous', 'Story-Rich']
+            },
+            {
+                id: 9,
+                title: 'Helldivers 2',
+                genre: 'Shooter',
+                platform: 'PC/PlayStation',
+                rating: 8.4,
+                reviews: 5023,
+                verdict: 'worth',
+                price: '$39.99',
+                description: 'Cooperative chaos shooter that\'s endlessly fun with friends',
+                tags: ['Multiplayer', 'Co-op', 'Action']
+            },
+            {
+                id: 10,
+                title: 'Final Fantasy VII Rebirth',
+                genre: 'RPG',
+                platform: 'PlayStation',
+                rating: 8.6,
+                reviews: 2134,
+                verdict: 'worth',
+                price: '$69.99',
+                description: 'Stunning conclusion to the remake trilogy with epic scope',
+                tags: ['Story-Rich', 'Gorgeous', 'Emotional']
+            },
+            {
+                id: 11,
+                title: 'Super Mario Bros Wonder',
+                genre: 'Platformer',
+                platform: 'Nintendo',
+                rating: 9.0,
+                reviews: 2876,
+                verdict: 'worth',
+                price: '$59.99',
+                description: 'Creative 2D platformer with innovative transformation mechanics',
+                tags: ['Colorful', 'Fun', 'Nintendo']
+            },
+            {
+                id: 12,
+                title: 'The Legend of Zelda: Tears of the Kingdom',
+                genre: 'Action Adventure',
+                platform: 'Nintendo',
+                rating: 9.3,
+                reviews: 5234,
+                verdict: 'worth',
+                price: '$69.99',
+                description: 'Epic open-world adventure with incredible creativity and freedom',
+                tags: ['Adventure', 'Story-Rich', 'Exploration']
+            },
+            {
+                id: 13,
+                title: 'Super Smash Bros Ultimate',
+                genre: 'Fighting',
+                platform: 'Nintendo',
+                rating: 8.8,
+                reviews: 3452,
+                verdict: 'worth',
+                price: '$59.99',
+                description: 'Ultimate fighting game with massive roster and endless fun',
+                tags: ['Multiplayer', 'Fighting', 'Competitive']
+            },
+            {
+                id: 14,
+                title: 'Mario Kart 8 Deluxe',
+                genre: 'Racing',
+                platform: 'Nintendo',
+                rating: 8.9,
+                reviews: 4123,
+                verdict: 'worth',
+                price: '$59.99',
+                description: 'Best Mario Kart experience with tons of content and fun tracks',
+                tags: ['Racing', 'Multiplayer', 'Fun']
+            },
+            {
+                id: 15,
+                title: 'Hollow Knight: Silksong',
+                genre: 'Metroidvania',
+                platform: 'PC/Nintendo',
+                rating: 9.1,
+                reviews: 2567,
+                verdict: 'worth',
+                price: '$14.99',
+                description: 'Challenging and beautiful metroidvania with exquisite art style',
+                tags: ['Challenging', 'Exploration', 'Beautiful']
+            },
+            {
+                id: 16,
+                title: 'Starfield',
+                genre: 'Action RPG',
+                platform: 'PC/Xbox',
+                rating: 7.4,
+                reviews: 2891,
+                verdict: 'mixed',
+                price: '$69.99',
+                description: 'Ambitious space RPG with great exploration but some technical issues',
+                tags: ['Space', 'Exploration', 'RPG']
+            },
+            {
+                id: 17,
+                title: 'Dragon\'s Dogma 2',
+                genre: 'Action RPG',
+                platform: 'PC/PlayStation/Xbox',
+                rating: 8.3,
+                reviews: 1934,
+                verdict: 'worth',
+                price: '$69.99',
+                description: 'Epic action RPG with incredible boss battles and deep gameplay',
+                tags: ['Action', 'Fantasy', 'Challenging']
+            },
+            {
+                id: 18,
+                title: 'Avatar: Frontiers of Pandora',
+                genre: 'Action Adventure',
+                platform: 'PC/PlayStation/Xbox',
+                rating: 7.9,
+                reviews: 1567,
+                verdict: 'mixed',
+                price: '$69.99',
+                description: 'Visually stunning world but gameplay feels familiar and repetitive',
+                tags: ['Beautiful', 'Adventure', 'Open World']
+            },
+            {
+                id: 19,
+                title: 'Persona 5 Royal',
+                genre: 'JRPG',
+                platform: 'PC/PlayStation',
+                rating: 9.0,
+                reviews: 2234,
+                verdict: 'worth',
+                price: '$59.99',
+                description: 'Stylish JRPG masterpiece with unforgettable characters and music',
+                tags: ['Story-Rich', 'Stylish', 'Long']
+            },
+            {
+                id: 20,
+                title: 'Hades',
+                genre: 'Roguelike',
+                platform: 'Multi-Platform',
+                rating: 8.7,
+                reviews: 3876,
+                verdict: 'worth',
+                price: '$24.99',
+                description: 'Addictive roguelike with incredible art, music, and storytelling',
+                tags: ['Roguelike', 'Beautiful', 'Addictive']
+            },
+            {
+                id: 21,
+                title: 'Stray',
+                genre: 'Adventure',
+                platform: 'PC/PlayStation',
+                rating: 8.2,
+                reviews: 2145,
+                verdict: 'worth',
+                price: '$29.99',
+                description: 'Charming cyberpunk adventure playing as a cat with emotional depth',
+                tags: ['Story-Rich', 'Emotional', 'Unique']
+            },
+            {
+                id: 22,
+                title: 'Forspoken',
+                genre: 'Action RPG',
+                platform: 'PlayStation/PC',
+                rating: 6.1,
+                reviews: 1023,
+                verdict: 'skip',
+                price: '$69.99',
+                description: 'Beautiful world undermined by poor story and awkward dialogue',
+                tags: ['Action', 'Magic', 'Disappointing']
+            },
+            {
+                id: 23,
+                title: 'Alan Wake 2',
+                genre: 'Psychological Thriller',
+                platform: 'PC/PlayStation/Xbox',
+                rating: 8.5,
+                reviews: 1876,
+                verdict: 'worth',
+                price: '$59.99',
+                description: 'Intense psychological thriller with masterful storytelling and atmosphere',
+                tags: ['Horror', 'Story-Rich', 'Atmospheric']
+            },
+            {
+                id: 24,
+                title: 'Tekken 8',
+                genre: 'Fighting',
+                platform: 'PC/PlayStation/Xbox',
+                rating: 8.4,
+                reviews: 1234,
+                verdict: 'worth',
+                price: '$69.99',
+                description: 'Next-gen fighting game with incredible depth and responsive combat',
+                tags: ['Fighting', 'Competitive', 'Multiplayer']
+            },
+            {
+                id: 25,
+                title: 'Like a Dragon: Infinite Wealth',
+                genre: 'Action Adventure',
+                platform: 'PlayStation/PC',
+                rating: 8.6,
+                reviews: 1654,
+                verdict: 'worth',
+                price: '$59.99',
+                description: 'Charming yakuza adventure with humor, heart, and engaging combat',
+                tags: ['Story-Rich', 'Humor', 'Unique']
+            }
+        ];
+
+        const genres = ['all', 'Action RPG', 'RPG', 'Shooter', 'Action Adventure', 'Adventure', 'Hero Shooter'];
+        const platforms = ['all', 'PC', 'PlayStation', 'Xbox', 'Nintendo', 'Mobile', 'Multi-Platform'];
+        let selectedGenre = 'all';
+        let selectedPlatform = 'all';
+        let searchQuery = '';
+        let sortBy = 'rating';
+
+        function initializeFilters() {
+            const filterContainer = document.getElementById('filterButtons');
+            genres.forEach(genre => {
+                const btn = document.createElement('button');
+                btn.className = 'filter-btn' + (genre === 'all' ? ' active' : '');
+                btn.textContent = genre === 'all' ? '◆ All Genres' : genre;
+                btn.onclick = () => setGenre(genre);
+                filterContainer.appendChild(btn);
+            });
+        }
+
+        function initializePlatformFilters() {
+            const platformContainer = document.getElementById('platformButtons');
+            platforms.forEach(platform => {
+                const btn = document.createElement('button');
+                btn.className = 'platform-btn' + (platform === 'all' ? ' active' : '');
+                btn.textContent = platform === 'all' ? '🎮 All Platforms' : platform;
+                btn.onclick = () => setPlatform(platform);
+                platformContainer.appendChild(btn);
+            });
+        }
+
+        function setGenre(genre) {
+            selectedGenre = genre;
+            updateFilters();
+            renderGames();
+        }
+
+        function setPlatform(platform) {
+            selectedPlatform = platform;
+            updatePlatformFilters();
+            renderGames();
+        }
+
+        function setSortBy(sort) {
+            sortBy = sort;
+            const btns = document.querySelectorAll('.sort-btn');
+            btns.forEach(btn => btn.classList.remove('active'));
+            event.target.closest('.sort-btn').classList.add('active');
+            renderGames();
+        }
+
+        function toggleTheme() {
+            document.body.classList.toggle('light-mode');
+            const themeBtn = document.querySelector('.theme-toggle');
+            
+            if (document.body.classList.contains('light-mode')) {
+                themeBtn.innerHTML = '☀️ Light';
+                localStorage.setItem('theme', 'light');
+            } else {
+                themeBtn.innerHTML = '🌙 Dark';
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        // Load saved theme preference on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            const themeBtn = document.querySelector('.theme-toggle');
+            if (savedTheme === 'light') {
+                document.body.classList.add('light-mode');
+                themeBtn.innerHTML = '☀️ Light';
+            } else {
+                themeBtn.innerHTML = '🌙 Dark';
+            }
+        });
+
+        function updateFilters() {
+            const btns = document.querySelectorAll('.filter-btn');
+            btns.forEach((btn, idx) => {
+                if (genres[idx] === selectedGenre) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+        }
+
+        function updatePlatformFilters() {
+            const btns = document.querySelectorAll('.platform-btn');
+            btns.forEach((btn, idx) => {
+                if (platforms[idx] === selectedPlatform) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+        }
+
+        function getFilteredGames() {
+            return games
+                .filter(game => {
+                    const matchesGenre = selectedGenre === 'all' || game.genre === selectedGenre;
+                    const matchesPlatform = selectedPlatform === 'all' || game.platform.includes(selectedPlatform);
+                    const matchesSearch = game.title.toLowerCase().includes(searchQuery.toLowerCase());
+                    return matchesGenre && matchesPlatform && matchesSearch;
+                })
+                .sort((a, b) => {
+                    if (sortBy === 'rating') return b.rating - a.rating;
+                    if (sortBy === 'reviews') return b.reviews - a.reviews;
+                    return 0;
+                });
+        }
+
+        function getVerdictLabel(verdict) {
+            if (verdict === 'worth') return '✓ WORTH IT';
+            if (verdict === 'mixed') return '≈ MIXED';
+            return '✗ SKIP IT';
+        }
+
+        function getVerdictClass(verdict) {
+            if (verdict === 'worth') return 'verdict-worth';
+            if (verdict === 'mixed') return 'verdict-mixed';
+            return 'verdict-skip';
+        }
+
+        function openDetails(gameId) {
+            const game = games.find(g => g.id === gameId);
+            if (!game) return;
+
+            const starCount = Math.floor(game.rating / 2);
+            const starsHtml = [...Array(5)].map((_, i) => {
+                const isFilled = i < starCount;
+                return `<span class="star ${isFilled ? 'filled' : 'empty'}">★</span>`;
+            }).join('');
+
+            const tagsHtml = game.tags.map(tag => `<span class="detailed-tag">${tag}</span>`).join('');
+
+            document.getElementById('detailsTitle').textContent = game.title;
+            document.getElementById('detailsGenre').textContent = game.genre;
+            document.getElementById('detailsPlatform').textContent = '📱 ' + game.platform;
+            document.getElementById('detailsDescription').textContent = game.description;
+            document.getElementById('detailsStars').innerHTML = starsHtml;
+            document.getElementById('detailsRatingNumber').textContent = game.rating;
+            document.getElementById('detailsReviewCount').textContent = game.reviews + ' reviews';
+            document.getElementById('detailsPrice').textContent = game.price;
+            document.getElementById('detailsTotalReviews').textContent = game.reviews.toLocaleString();
+            document.getElementById('detailsTags').innerHTML = tagsHtml;
+
+            const verdictBadge = document.getElementById('detailsVerdictBadge');
+            verdictBadge.className = 'details-verdict-badge ' + getVerdictClass(game.verdict);
+            verdictBadge.textContent = getVerdictLabel(game.verdict);
+
+            // Generate buy links based on platform
+            const buySection = document.getElementById('buySection');
+            let buyLinksHtml = '<div style="width: 100%; padding-bottom: 1rem; border-bottom: 1px solid rgba(51, 65, 85, 0.5);"><div style="font-size: 0.875rem; color: #94a3b8; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem;">Buy Now</div></div>';
+            
+            const platform = game.platform.toLowerCase();
+            const gameSearchQuery = `${game.title} game`;
+            let links = [];
+
+            // Add appropriate store links based on platform
+            if (platform.includes('pc') || platform.includes('steam')) {
+                links.push(`<a href="https://store.steampowered.com/search/?term=${encodeURIComponent(game.title)}" target="_blank" class="buy-btn buy-btn-steam">🎮 Steam</a>`);
+            }
+            if (platform.includes('playstation') || platform.includes('ps')) {
+                links.push(`<a href="https://www.playstation.com/en-us/search/${encodeURIComponent(game.title)}" target="_blank" class="buy-btn buy-btn-playstation">🎮 PlayStation Store</a>`);
+            }
+            if (platform.includes('xbox')) {
+                links.push(`<a href="https://www.xbox.com/en-US/search?q=${encodeURIComponent(game.title)}" target="_blank" class="buy-btn buy-btn-xbox">🎮 Xbox Store</a>`);
+            }
+            if (platform.includes('nintendo')) {
+                links.push(`<a href="https://www.nintendo.com/search/?query=${encodeURIComponent(game.title)}" target="_blank" class="buy-btn buy-btn-nintendo">🎮 Nintendo eShop</a>`);
+            }
+            if (platform.includes('mobile') || platform.includes('ios') || platform.includes('android')) {
+                links.push(`<a href="https://www.apple.com/app-store/" target="_blank" class="buy-btn buy-btn-appstore">🎮 App Store</a>`);
+            }
+
+            // Add Amazon as a backup option - using "game" in search query for better results
+            if (links.length === 0) {
+                links.push(`<a href="https://www.amazon.com/s?k=${encodeURIComponent(gameSearchQuery)}" target="_blank" class="buy-btn buy-btn-amazon">🛒 Buy on Amazon</a>`);
+            } else {
+                links.push(`<a href="https://www.amazon.com/s?k=${encodeURIComponent(gameSearchQuery)}" target="_blank" class="buy-btn buy-btn-amazon">🛒 Amazon</a>`);
+            }
+
+            buySection.innerHTML = buyLinksHtml + '<div style="display: flex; flex-wrap: wrap; gap: 1rem;">' + links.join('') + '</div>';
+
+            document.getElementById('detailsModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeDetails() {
+            document.getElementById('detailsModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close modal when clicking outside
+        const setupModalListener = () => {
+            const modal = document.getElementById('detailsModal');
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closeDetails();
+                }
+            });
+        }
+
+        function renderGames() {
+            const filtered = getFilteredGames();
+            const grid = document.getElementById('gamesGrid');
+            const noResults = document.getElementById('noResults');
+
+            grid.innerHTML = '';
+
+            if (filtered.length === 0) {
+                noResults.style.display = 'block';
+                return;
+            }
+
+            noResults.style.display = 'none';
+
+            filtered.forEach((game, index) => {
+                const starCount = Math.floor(game.rating / 2);
+                const starsHtml = [...Array(5)].map((_, i) => {
+                    const isFilled = i < starCount;
+                    return `<span class="star ${isFilled ? 'filled' : 'empty'}">★</span>`;
+                }).join('');
+
+                const tagsHtml = game.tags.map(tag => `<span class="tag">${tag}</span>`).join('');
+
+                const card = document.createElement('div');
+                card.className = `game-card delay-${(index % 10) + 1}`;
+                card.style.cursor = 'pointer';
+                card.onclick = () => openDetails(game.id);
+                card.innerHTML = `
+                    <div class="card-inner">
+                        <div class="card-content">
+                            <div class="verdict-badge ${getVerdictClass(game.verdict)}">
+                                ${getVerdictLabel(game.verdict)}
+                            </div>
+                            <h2 class="game-title">${game.title}</h2>
+                            <p class="game-genre">${game.genre}</p>
+                            <p class="game-platform">📱 ${game.platform}</p>
+                            <p class="game-description">${game.description}</p>
+                            <div class="tags">${tagsHtml}</div>
+                            <div class="rating-row">
+                                <div style="display: flex; align-items: center;">
+                                    <div class="stars">${starsHtml}</div>
+                                    <span class="rating-number">${game.rating}</span>
+                                </div>
+                                <span class="review-count">${game.reviews} reviews</span>
+                            </div>
+                            <div class="price-row">
+                                <span class="price-label">Price</span>
+                                <span class="price-value">${game.price}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            searchQuery = e.target.value;
+            renderGames();
+        });
+
+        // Scroll behavior to hide/show header
+        const header = document.querySelector('header');
+        const main = document.querySelector('main');
+
+        // Set initial margin based on header height
+        function updateMainMargin() {
+            const headerHeight = header.offsetHeight;
+            main.style.marginTop = (headerHeight + 30) + 'px';
+        }
+
+        updateMainMargin();
+        window.addEventListener('resize', updateMainMargin);
+
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.scrollY;
+
+            if (scrollTop > 50) {
+                // Scrolled down - hide header
+                header.classList.add('hidden');
+            } else {
+                // At the very top - show header
+                header.classList.remove('hidden');
+            }
+        });
+
+        initializeFilters();
+        initializePlatformFilters();
+        setupModalListener();
+        renderGames();
+    </script>
+</body>
+</html>
