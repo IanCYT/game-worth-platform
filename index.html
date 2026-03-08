@@ -106,6 +106,7 @@
             align-items: baseline;
             gap: 0.75rem;
             margin-bottom: 2rem;
+            flex-wrap: wrap;
         }
 
         h1 {
@@ -313,11 +314,138 @@
             .games-grid {
                 grid-template-columns: 1fr;
             }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .header-inner {
+                padding: 1rem 1rem;
+            }
+
+            main {
+                padding: 4rem 1rem 2rem 1rem;
+            }
+
+            .filter-buttons, .platform-buttons {
+                gap: 0.5rem;
+            }
+
+            .filter-btn, .platform-btn {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.85rem;
+            }
+
+            .details-content {
+                padding: 2rem 1.5rem;
+                width: 95%;
+                max-width: 100%;
+            }
+
+            .buy-section {
+                flex-direction: column;
+            }
+
+            .buy-btn {
+                min-width: 100%;
+            }
+
+            .rating-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .details-label {
+                font-size: 0.75rem;
+            }
+
+            .stat-item {
+                padding: 0.75rem;
+            }
         }
 
-        @media (min-width: 1024px) {
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            .subtitle {
+                font-size: 1rem;
+            }
+
+            .header-inner {
+                padding: 0.75rem 0.75rem;
+            }
+
+            main {
+                padding: 3rem 0.75rem 2rem 0.75rem;
+            }
+
+            #searchInput {
+                padding: 0.6rem 0.8rem 0.6rem 2.5rem;
+                font-size: 16px;
+            }
+
+            .search-icon {
+                left: 0.7rem;
+                width: 1rem;
+                height: 1rem;
+            }
+
+            .filter-btn, .platform-btn, .sort-btn, .theme-toggle {
+                padding: 0.35rem 0.6rem;
+                font-size: 0.75rem;
+            }
+
+            .sort-buttons {
+                flex-direction: column;
+            }
+
+            .game-title {
+                font-size: 1.25rem;
+            }
+
+            .details-content {
+                padding: 1.5rem 1rem;
+                width: 98%;
+            }
+
+            .details-title-section h2 {
+                font-size: 1.75rem;
+            }
+
+            .close-btn {
+                font-size: 1.25rem;
+            }
+
+            .card-content {
+                padding: 1rem;
+            }
+        }
+
+        @media (max-width: 1024px) and (min-width: 769px) {
             .games-grid {
-                grid-template-columns: repeat(3, 1fr);
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            main {
+                padding: 5rem 1.5rem 3rem 1.5rem;
+            }
+        }
+
+        /* Touch-friendly improvements */
+        @media (hover: none) and (pointer: coarse) {
+            .filter-btn, .platform-btn, .sort-btn, .theme-toggle, .buy-btn {
+                min-height: 44px;
+                padding: 0.6rem 1rem;
+            }
+
+            .game-card {
+                margin-bottom: 0.5rem;
+            }
+
+            button, a, [role="button"] {
+                min-height: 44px;
+                min-width: 44px;
             }
         }
 
@@ -804,12 +932,75 @@
             cursor: pointer;
         }
 
-        .game-card {
-            transition: transform 0.15s ease;
-        }
-
         .game-card:hover {
             transform: translateY(-2px);
+        }
+
+        /* Game Images and Screenshots */
+        .game-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 0.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(51, 65, 85, 0.5);
+        }
+
+        body.light-mode .game-image {
+            border: 1px solid rgba(100, 116, 139, 0.2);
+        }
+
+        .screenshot-gallery {
+            margin-top: 1.5rem;
+        }
+
+        .gallery-label {
+            font-size: 0.875rem;
+            color: #94a3b8;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+        }
+
+        body.light-mode .gallery-label {
+            color: #64748b;
+        }
+
+        .screenshots-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+
+        .screenshot-thumb {
+            width: 100%;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 0.5rem;
+            border: 2px solid rgba(51, 65, 85, 0.5);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        body.light-mode .screenshot-thumb {
+            border: 2px solid rgba(100, 116, 139, 0.2);
+        }
+
+        .screenshot-thumb:hover {
+            border-color: #06b6d4;
+            transform: scale(1.05);
+        }
+
+        body.light-mode .screenshot-thumb:hover {
+            border-color: #0891b2;
+        }
+
+        .game-card-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 0.75rem 0.75rem 0 0;
         }
 
         /* Buy Links */
@@ -991,8 +1182,12 @@
                     <div class="details-label">Details</div>
                     <div class="rating-stats">
                         <div class="stat-item">
-                            <div class="stat-label">Price</div>
+                            <div class="stat-label">Current Price</div>
                             <div class="stat-value" id="detailsPrice"></div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">Price Range</div>
+                            <div class="stat-value" id="detailsPriceRange" style="font-size: 1rem; color: #06b6d4;"></div>
                         </div>
                         <div class="stat-item">
                             <div class="stat-label">Total Reviews</div>
@@ -1026,8 +1221,15 @@
                 reviews: 1247,
                 verdict: 'worth',
                 price: '$59.99',
+                priceRange: { min: '$29.99', max: '$69.99' },
                 description: 'Breathtaking open-world action RPG with stunning world design',
-                tags: ['Challenging', 'Story-Rich', 'Open World']
+                tags: ['Challenging', 'Story-Rich', 'Open World'],
+                image: 'https://images.igdb.com/igdb/image/upload/t_cover_big/co2eyl.jpg',
+                screenshots: [
+                    'https://images.igdb.com/igdb/image/upload/t_screenshot_big/scr1hc.jpg',
+                    'https://images.igdb.com/igdb/image/upload/t_screenshot_big/scr1hd.jpg',
+                    'https://images.igdb.com/igdb/image/upload/t_screenshot_big/scr1he.jpg'
+                ]
             },
             {
                 id: 2,
@@ -1038,8 +1240,15 @@
                 reviews: 2341,
                 verdict: 'mixed',
                 price: '$59.99',
+                priceRange: { min: '$19.99', max: '$69.99' },
                 description: 'Ambitious cyberpunk adventure with great story but technical quirks',
-                tags: ['Story-Rich', 'Futuristic', 'Immersive']
+                tags: ['Story-Rich', 'Futuristic', 'Immersive'],
+                image: 'https://images.igdb.com/igdb/image/upload/t_cover_big/co1q73.jpg',
+                screenshots: [
+                    'https://images.igdb.com/igdb/image/upload/t_screenshot_big/scr13t2.jpg',
+                    'https://images.igdb.com/igdb/image/upload/t_screenshot_big/scr13t3.jpg',
+                    'https://images.igdb.com/igdb/image/upload/t_screenshot_big/scr13t4.jpg'
+                ]
             },
             {
                 id: 3,
@@ -1050,6 +1259,7 @@
                 reviews: 3421,
                 verdict: 'worth',
                 price: '$59.99',
+                priceRange: { min: '$49.99', max: '$69.99' },
                 description: 'Masterpiece of interactive storytelling with incredible freedom',
                 tags: ['Story-Rich', 'Deep Choices', 'Replayable']
             },
@@ -1062,6 +1272,7 @@
                 reviews: 189,
                 verdict: 'skip',
                 price: 'Free',
+                priceRange: { min: '$0', max: '$0' },
                 description: 'Failed live-service experiment that never found its audience',
                 tags: ['Multiplayer', 'Live-Service', 'Forgettable']
             },
@@ -1074,6 +1285,7 @@
                 reviews: 2145,
                 verdict: 'worth',
                 price: '$29.99',
+                priceRange: { min: '$20', max: '$40' },
                 description: 'Creative monster-catching game with surprising depth and charm',
                 tags: ['Creatures', 'Crafting', 'Multiplayer']
             },
@@ -1086,6 +1298,7 @@
                 reviews: 892,
                 verdict: 'worth',
                 price: '$69.99',
+                priceRange: { min: '$49.99', max: '$69.99' },
                 description: 'Immersive first-person adventure capturing the spirit perfectly',
                 tags: ['Adventure', 'Immersive', 'Cinematic']
             },
@@ -1098,6 +1311,7 @@
                 reviews: 1456,
                 verdict: 'mixed',
                 price: '$69.99',
+                priceRange: { min: '$49.99', max: '$69.99' },
                 description: 'Solid Star Wars experience held back by performance issues',
                 tags: ['Action', 'Story-Rich', 'Open World']
             },
@@ -1110,6 +1324,7 @@
                 reviews: 4231,
                 verdict: 'worth',
                 price: '$69.99',
+                priceRange: { min: '$49.99', max: '$69.99' },
                 description: 'Challenging Asian action fantasy with phenomenal combat',
                 tags: ['Challenging', 'Gorgeous', 'Story-Rich']
             },
@@ -1122,6 +1337,7 @@
                 reviews: 5023,
                 verdict: 'worth',
                 price: '$39.99',
+                priceRange: { min: '$29.99', max: '$69.99' },
                 description: 'Cooperative chaos shooter that\'s endlessly fun with friends',
                 tags: ['Multiplayer', 'Co-op', 'Action']
             },
@@ -1134,6 +1350,7 @@
                 reviews: 2134,
                 verdict: 'worth',
                 price: '$69.99',
+                priceRange: { min: '$49.99', max: '$69.99' },
                 description: 'Stunning conclusion to the remake trilogy with epic scope',
                 tags: ['Story-Rich', 'Gorgeous', 'Emotional']
             },
@@ -1146,6 +1363,7 @@
                 reviews: 2876,
                 verdict: 'worth',
                 price: '$59.99',
+                priceRange: { min: '$49.99', max: '$69.99' },
                 description: 'Creative 2D platformer with innovative transformation mechanics',
                 tags: ['Colorful', 'Fun', 'Nintendo']
             },
@@ -1158,6 +1376,7 @@
                 reviews: 5234,
                 verdict: 'worth',
                 price: '$69.99',
+                priceRange: { min: '$49.99', max: '$69.99' },
                 description: 'Epic open-world adventure with incredible creativity and freedom',
                 tags: ['Adventure', 'Story-Rich', 'Exploration']
             },
@@ -1170,6 +1389,7 @@
                 reviews: 3452,
                 verdict: 'worth',
                 price: '$59.99',
+                priceRange: { min: '$49.99', max: '$69.99' },
                 description: 'Ultimate fighting game with massive roster and endless fun',
                 tags: ['Multiplayer', 'Fighting', 'Competitive']
             },
@@ -1182,6 +1402,7 @@
                 reviews: 4123,
                 verdict: 'worth',
                 price: '$59.99',
+                priceRange: { min: '$49.99', max: '$69.99' },
                 description: 'Best Mario Kart experience with tons of content and fun tracks',
                 tags: ['Racing', 'Multiplayer', 'Fun']
             },
@@ -1194,6 +1415,7 @@
                 reviews: 2567,
                 verdict: 'worth',
                 price: '$14.99',
+                priceRange: { min: '$9.99', max: '$24.99' },
                 description: 'Challenging and beautiful metroidvania with exquisite art style',
                 tags: ['Challenging', 'Exploration', 'Beautiful']
             },
@@ -1206,6 +1428,7 @@
                 reviews: 2891,
                 verdict: 'mixed',
                 price: '$69.99',
+                priceRange: { min: '$49.99', max: '$69.99' },
                 description: 'Ambitious space RPG with great exploration but some technical issues',
                 tags: ['Space', 'Exploration', 'RPG']
             },
@@ -1218,6 +1441,7 @@
                 reviews: 1934,
                 verdict: 'worth',
                 price: '$69.99',
+                priceRange: { min: '$49.99', max: '$69.99' },
                 description: 'Epic action RPG with incredible boss battles and deep gameplay',
                 tags: ['Action', 'Fantasy', 'Challenging']
             },
@@ -1230,6 +1454,7 @@
                 reviews: 1567,
                 verdict: 'mixed',
                 price: '$69.99',
+                priceRange: { min: '$49.99', max: '$69.99' },
                 description: 'Visually stunning world but gameplay feels familiar and repetitive',
                 tags: ['Beautiful', 'Adventure', 'Open World']
             },
@@ -1242,6 +1467,7 @@
                 reviews: 2234,
                 verdict: 'worth',
                 price: '$59.99',
+                priceRange: { min: '$39.99', max: '$69.99' },
                 description: 'Stylish JRPG masterpiece with unforgettable characters and music',
                 tags: ['Story-Rich', 'Stylish', 'Long']
             },
@@ -1254,6 +1480,7 @@
                 reviews: 3876,
                 verdict: 'worth',
                 price: '$24.99',
+                priceRange: { min: '$9.99', max: '$34.99' },
                 description: 'Addictive roguelike with incredible art, music, and storytelling',
                 tags: ['Roguelike', 'Beautiful', 'Addictive']
             },
@@ -1266,6 +1493,7 @@
                 reviews: 2145,
                 verdict: 'worth',
                 price: '$29.99',
+                priceRange: { min: '$19.99', max: '$39.99' },
                 description: 'Charming cyberpunk adventure playing as a cat with emotional depth',
                 tags: ['Story-Rich', 'Emotional', 'Unique']
             },
@@ -1278,6 +1506,7 @@
                 reviews: 1023,
                 verdict: 'skip',
                 price: '$69.99',
+                priceRange: { min: '$49.99', max: '$69.99' },
                 description: 'Beautiful world undermined by poor story and awkward dialogue',
                 tags: ['Action', 'Magic', 'Disappointing']
             },
@@ -1290,6 +1519,7 @@
                 reviews: 1876,
                 verdict: 'worth',
                 price: '$59.99',
+                priceRange: { min: '$39.99', max: '$69.99' },
                 description: 'Intense psychological thriller with masterful storytelling and atmosphere',
                 tags: ['Horror', 'Story-Rich', 'Atmospheric']
             },
@@ -1302,6 +1532,7 @@
                 reviews: 1234,
                 verdict: 'worth',
                 price: '$69.99',
+                priceRange: { min: '$49.99', max: '$69.99' },
                 description: 'Next-gen fighting game with incredible depth and responsive combat',
                 tags: ['Fighting', 'Competitive', 'Multiplayer']
             },
@@ -1314,6 +1545,7 @@
                 reviews: 1654,
                 verdict: 'worth',
                 price: '$59.99',
+                priceRange: { min: '$49.99', max: '$69.99' },
                 description: 'Charming yakuza adventure with humor, heart, and engaging combat',
                 tags: ['Story-Rich', 'Humor', 'Unique']
             },
@@ -1326,6 +1558,7 @@
                 reviews: 6234,
                 verdict: 'worth',
                 price: '$39.99',
+                priceRange: { min: '$19.99', max: '$49.99' },
                 description: 'Epic open-world RPG with incredible storytelling and characters',
                 tags: ['Story-Rich', 'Open World', 'Fantasy']
             },
@@ -1338,6 +1571,7 @@
                 reviews: 5876,
                 verdict: 'worth',
                 price: '$49.99',
+                priceRange: { min: '$29.99', max: '$59.99' },
                 description: 'Masterpiece of narrative design with stunning open world',
                 tags: ['Story-Rich', 'Open World', 'Immersive']
             },
@@ -1350,6 +1584,7 @@
                 reviews: 8934,
                 verdict: 'worth',
                 price: '$26.95',
+                priceRange: { min: '$20', max: '$40' },
                 description: 'Endless creativity and exploration in blocky worlds',
                 tags: ['Creative', 'Multiplayer', 'Timeless']
             },
@@ -1362,6 +1597,7 @@
                 reviews: 4123,
                 verdict: 'mixed',
                 price: 'Free',
+                priceRange: { min: '$0', max: '$20' },
                 description: 'Popular battle royale with constant updates but pay-to-win elements',
                 tags: ['Multiplayer', 'Competitive', 'Live-Service']
             },
@@ -1374,6 +1610,7 @@
                 reviews: 3456,
                 verdict: 'worth',
                 price: 'Free',
+                priceRange: { min: '$0', max: '$0' },
                 description: 'Classic competitive shooter perfected with modern mechanics',
                 tags: ['Competitive', 'Multiplayer', 'Esports']
             },
@@ -1386,6 +1623,7 @@
                 reviews: 2789,
                 verdict: 'worth',
                 price: '$39.99',
+                priceRange: { min: '$29.99', max: '$49.99' },
                 description: 'Massive expansion with incredible boss fights and new areas',
                 tags: ['Challenging', 'Story-Rich', 'DLC']
             },
@@ -1398,6 +1636,7 @@
                 reviews: 3234,
                 verdict: 'worth',
                 price: '$39.99',
+                priceRange: { min: '$29.99', max: '$59.99' },
                 description: 'Stunning samurai action with beautiful open world',
                 tags: ['Action', 'Story-Rich', 'Gorgeous']
             },
@@ -1410,6 +1649,7 @@
                 reviews: 2876,
                 verdict: 'worth',
                 price: '$39.99',
+                priceRange: { min: '$29.99', max: '$59.99' },
                 description: 'Emotional storytelling with intense action sequences',
                 tags: ['Story-Rich', 'Emotional', 'Action']
             },
@@ -1422,6 +1662,7 @@
                 reviews: 4567,
                 verdict: 'worth',
                 price: '$69.99',
+                priceRange: { min: '$49.99', max: '$79.99' },
                 description: 'Epic conclusion to Norse saga with stunning visuals',
                 tags: ['Story-Rich', 'Action', 'Mythology']
             },
@@ -1434,6 +1675,7 @@
                 reviews: 3123,
                 verdict: 'mixed',
                 price: '$49.99',
+                priceRange: { min: '$39.99', max: '$69.99' },
                 description: 'Immersive wizarding world but repetitive gameplay',
                 tags: ['Fantasy', 'Story-Rich', 'Magic']
             },
@@ -1446,6 +1688,7 @@
                 reviews: 2456,
                 verdict: 'worth',
                 price: '$59.99',
+                priceRange: { min: '$39.99', max: '$69.99' },
                 description: 'Excellent Star Wars adventure with great lightsaber combat',
                 tags: ['Action', 'Story-Rich', 'Sci-Fi']
             },
@@ -1458,6 +1701,7 @@
                 reviews: 1234,
                 verdict: 'mixed',
                 price: '$49.99',
+                priceRange: { min: '$29.99', max: '$69.99' },
                 description: 'Fun western action but lacks originality',
                 tags: ['Action', 'Western', 'Open World']
             },
@@ -1470,23 +1714,12 @@
                 reviews: 2345,
                 verdict: 'worth',
                 price: '$59.99',
+                priceRange: { min: '$39.99', max: '$69.99' },
                 description: 'Stunning JRPG with incredible art and deep story',
                 tags: ['Story-Rich', 'Stylish', 'Fantasy']
             },
             {
                 id: 39,
-                title: 'Starfield',
-                genre: 'Action RPG',
-                platform: 'PC/Xbox',
-                rating: 7.4,
-                reviews: 2891,
-                verdict: 'mixed',
-                price: '$69.99',
-                description: 'Ambitious space exploration but feels empty at times',
-                tags: ['Space', 'Exploration', 'RPG']
-            },
-            {
-                id: 40,
                 title: 'Suicide Squad: Kill the Justice League',
                 genre: 'Action',
                 platform: 'PC/PlayStation/Xbox',
@@ -1494,6 +1727,7 @@
                 reviews: 876,
                 verdict: 'skip',
                 price: '$69.99',
+                priceRange: { min: '$49.99', max: '$79.99' },
                 description: 'Disappointing live-service game with poor execution',
                 tags: ['Action', 'Live-Service', 'Forgettable']
             },
@@ -1506,6 +1740,7 @@
                 reviews: 7234,
                 verdict: 'worth',
                 price: '$59.99',
+                priceRange: { min: '$49.99', max: '$69.99' },
                 description: 'Revolutionary open-world Zelda that redefined the genre',
                 tags: ['Adventure', 'Exploration', 'Masterpiece']
             },
@@ -1518,6 +1753,7 @@
                 reviews: 4567,
                 verdict: 'worth',
                 price: '$49.99',
+                priceRange: { min: '$39.99', max: '$59.99' },
                 description: 'Timeless classic that defined 3D adventure games',
                 tags: ['Adventure', 'Story-Rich', 'Iconic']
             },
@@ -1530,6 +1766,7 @@
                 reviews: 2876,
                 verdict: 'worth',
                 price: '$49.99',
+                priceRange: { min: '$39.99', max: '$59.99' },
                 description: 'Unique time-loop adventure with incredible atmosphere',
                 tags: ['Adventure', 'Atmospheric', 'Unique']
             },
@@ -1542,6 +1779,7 @@
                 reviews: 2345,
                 verdict: 'worth',
                 price: '$49.99',
+                priceRange: { min: '$39.99', max: '$59.99' },
                 description: 'Beautiful sailing adventure with charm and creativity',
                 tags: ['Adventure', 'Beautiful', 'Creative']
             },
@@ -1554,6 +1792,7 @@
                 reviews: 3456,
                 verdict: 'worth',
                 price: '$19.99',
+                priceRange: { min: '$9.99', max: '$29.99' },
                 description: 'Legendary 2D Zelda that perfected the formula',
                 tags: ['Adventure', 'Classic', 'Timeless']
             },
@@ -1566,6 +1805,7 @@
                 reviews: 5432,
                 verdict: 'worth',
                 price: '$59.99',
+                priceRange: { min: '$49.99', max: '$69.99' },
                 description: 'Revolutionary 3D platformer that changed gaming forever',
                 tags: ['Platformer', 'Classic', 'Masterpiece']
             },
@@ -1578,6 +1818,7 @@
                 reviews: 3234,
                 verdict: 'worth',
                 price: '$49.99',
+                priceRange: { min: '$39.99', max: '$59.99' },
                 description: 'Innovative gravity-based platforming with amazing design',
                 tags: ['Platformer', 'Creative', 'Fun']
             },
@@ -1590,6 +1831,7 @@
                 reviews: 2789,
                 verdict: 'worth',
                 price: '$49.99',
+                priceRange: { min: '$39.99', max: '$59.99' },
                 description: 'Brilliant sequel with even more creative levels',
                 tags: ['Platformer', 'Fun', 'Challenging']
             },
@@ -1602,6 +1844,7 @@
                 reviews: 2345,
                 verdict: 'worth',
                 price: '$39.99',
+                priceRange: { min: '$29.99', max: '$49.99' },
                 description: 'Classic 2D Mario action with modern touches',
                 tags: ['Platformer', 'Fun', 'Multiplayer']
             },
@@ -1614,6 +1857,7 @@
                 reviews: 3876,
                 verdict: 'worth',
                 price: '$59.99',
+                priceRange: { min: '$49.99', max: '$69.99' },
                 description: 'Inventive possession mechanic creates incredible gameplay',
                 tags: ['Platformer', 'Creative', 'Fun']
             },
@@ -1626,6 +1870,7 @@
                 reviews: 2567,
                 verdict: 'worth',
                 price: '$59.99',
+                priceRange: { min: '$49.99', max: '$69.99' },
                 description: 'Fantastic 3D platformer with cooperative play',
                 tags: ['Platformer', 'Multiplayer', 'Fun']
             },
@@ -1638,6 +1883,7 @@
                 reviews: 4123,
                 verdict: 'worth',
                 price: '$9.99',
+                priceRange: { min: '$4.99', max: '$14.99' },
                 description: 'Groundbreaking indie RPG with emotional storytelling',
                 tags: ['Story-Rich', 'Emotional', 'Indie']
             },
@@ -1650,6 +1896,7 @@
                 reviews: 2345,
                 verdict: 'worth',
                 price: 'Free',
+                priceRange: { min: '$0', max: '$0' },
                 description: 'Spiritual successor to Undertale with fresh creativity',
                 tags: ['Story-Rich', 'Creative', 'Indie']
             },
@@ -1662,6 +1909,7 @@
                 reviews: 2876,
                 verdict: 'worth',
                 price: '$39.99',
+                priceRange: { min: '$29.99', max: '$49.99' },
                 description: 'Witty paper-based RPG with incredible humor',
                 tags: ['Story-Rich', 'Humor', 'Creative']
             },
@@ -1674,8 +1922,802 @@
                 reviews: 1876,
                 verdict: 'worth',
                 price: '$59.99',
+                priceRange: { min: '$49.99', max: '$69.99' },
                 description: 'Charming ghost-hunting adventure with great co-op',
                 tags: ['Adventure', 'Multiplayer', 'Fun']
+            },
+            {
+                id: 56,
+                title: 'Cuphead',
+                genre: 'Run and Gun',
+                platform: 'Multi-Platform',
+                rating: 8.9,
+                reviews: 2567,
+                verdict: 'worth',
+                price: '$19.99',
+                priceRange: { min: '$14.99', max: '$24.99' },
+                description: 'Gorgeously animated indie shooter with brutal difficulty',
+                tags: ['Challenging', 'Beautiful', 'Indie']
+            },
+            {
+                id: 57,
+                title: 'Hollow Knight',
+                genre: 'Metroidvania',
+                platform: 'Multi-Platform',
+                rating: 8.8,
+                reviews: 3234,
+                verdict: 'worth',
+                price: '$14.99',
+                priceRange: { min: '$9.99', max: '$19.99' },
+                description: 'Dark, challenging metroidvania with incredible atmosphere',
+                tags: ['Challenging', 'Atmospheric', 'Indie']
+            },
+            {
+                id: 58,
+                title: 'Celeste',
+                genre: 'Platformer',
+                platform: 'Multi-Platform',
+                rating: 8.7,
+                reviews: 2145,
+                verdict: 'worth',
+                price: '$19.99',
+                priceRange: { min: '$14.99', max: '$24.99' },
+                description: 'Emotional platformer about climbing a mountain',
+                tags: ['Challenging', 'Story-Rich', 'Indie']
+            },
+            {
+                id: 59,
+                title: 'Stardew Valley',
+                genre: 'Simulation',
+                platform: 'Multi-Platform',
+                rating: 9.0,
+                reviews: 4567,
+                verdict: 'worth',
+                price: '$14.99',
+                priceRange: { min: '$9.99', max: '$19.99' },
+                description: 'Cozy farming simulation with endless content',
+                tags: ['Relaxing', 'Indie', 'Addictive']
+            },
+            {
+                id: 60,
+                title: 'Terraria',
+                genre: 'Sandbox',
+                platform: 'Multi-Platform',
+                rating: 8.6,
+                reviews: 3876,
+                verdict: 'worth',
+                price: '$29.99',
+                priceRange: { min: '$14.99', max: '$34.99' },
+                description: '2D sandbox adventure with exploration and building',
+                tags: ['Indie', 'Exploration', 'Multiplayer']
+            },
+            {
+                id: 61,
+                title: 'Metroid Prime',
+                genre: 'Action Adventure',
+                platform: 'Nintendo',
+                rating: 9.2,
+                reviews: 2234,
+                verdict: 'worth',
+                price: '$49.99',
+                priceRange: { min: '$39.99', max: '$59.99' },
+                description: 'Innovative first-person Metroid adventure',
+                tags: ['Adventure', 'Exploration', 'Sci-Fi']
+            },
+            {
+                id: 62,
+                title: 'Metroid Dread',
+                genre: 'Action Adventure',
+                platform: 'Nintendo',
+                rating: 8.7,
+                reviews: 1876,
+                verdict: 'worth',
+                price: '$59.99',
+                priceRange: { min: '$49.99', max: '$69.99' },
+                description: 'Thrilling 2D Metroid with intense action',
+                tags: ['Adventure', 'Action', 'Challenging']
+            },
+            {
+                id: 63,
+                title: 'Donkey Kong Country: Tropical Freeze',
+                genre: 'Platformer',
+                platform: 'Nintendo',
+                rating: 8.8,
+                reviews: 1654,
+                verdict: 'worth',
+                price: '$59.99',
+                priceRange: { min: '$49.99', max: '$69.99' },
+                description: 'Gorgeous platformer with incredible level design',
+                tags: ['Platformer', 'Beautiful', 'Challenging']
+            },
+            {
+                id: 64,
+                title: 'The Legend of Zelda: Link\'s Awakening',
+                genre: 'Action Adventure',
+                platform: 'Nintendo',
+                rating: 8.5,
+                reviews: 1432,
+                verdict: 'worth',
+                price: '$59.99',
+                priceRange: { min: '$49.99', max: '$69.99' },
+                description: 'Charming Zelda adventure with quirky charm',
+                tags: ['Adventure', 'Story-Rich', 'Quirky']
+            },
+            {
+                id: 65,
+                title: 'Splatoon 3',
+                genre: 'Shooter',
+                platform: 'Nintendo',
+                rating: 8.4,
+                reviews: 2345,
+                verdict: 'worth',
+                price: '$59.99',
+                priceRange: { min: '$49.99', max: '$69.99' },
+                description: 'Colorful multiplayer shooter with unique mechanics',
+                tags: ['Multiplayer', 'Competitive', 'Colorful']
+            },
+            {
+                id: 66,
+                title: 'Kirby and the Forgotten Land',
+                genre: 'Platformer',
+                platform: 'Nintendo',
+                rating: 8.3,
+                reviews: 1876,
+                verdict: 'worth',
+                price: '$59.99',
+                priceRange: { min: '$49.99', max: '$69.99' },
+                description: 'Charming 3D Kirby adventure with copy powers',
+                tags: ['Platformer', 'Fun', 'Colorful']
+            },
+            {
+                id: 67,
+                title: 'Risk of Rain 2',
+                genre: 'Roguelike Shooter',
+                platform: 'Multi-Platform',
+                rating: 8.5,
+                reviews: 2456,
+                verdict: 'worth',
+                price: '$29.99',
+                priceRange: { min: '$19.99', max: '$34.99' },
+                description: 'Fast-paced roguelike shooter with great multiplayer',
+                tags: ['Shooter', 'Indie', 'Multiplayer']
+            },
+            {
+                id: 69,
+                title: 'Shovel Knight',
+                genre: 'Platformer',
+                platform: 'Multi-Platform',
+                rating: 8.4,
+                reviews: 1876,
+                verdict: 'worth',
+                price: '$14.99',
+                priceRange: { min: '$9.99', max: '$19.99' },
+                description: 'Retro-inspired platformer with challenging combat',
+                tags: ['Platformer', 'Retro', 'Challenging']
+            },
+            {
+                id: 70,
+                title: 'Ori and the Blind Forest',
+                genre: 'Platformer',
+                platform: 'Multi-Platform',
+                rating: 8.6,
+                reviews: 1654,
+                verdict: 'worth',
+                price: '$19.99',
+                priceRange: { min: '$14.99', max: '$24.99' },
+                description: 'Beautiful metroidvania platformer with emotional story',
+                tags: ['Platformer', 'Beautiful', 'Story-Rich']
+            },
+            {
+                id: 71,
+                title: 'Ori and the Will of the Wisps',
+                genre: 'Platformer',
+                platform: 'Multi-Platform',
+                rating: 8.8,
+                reviews: 1876,
+                verdict: 'worth',
+                price: '$19.99',
+                priceRange: { min: '$14.99', max: '$24.99' },
+                description: 'Stunning sequel with incredible platforming',
+                tags: ['Platformer', 'Beautiful', 'Challenging']
+            },
+            {
+                id: 72,
+                title: 'Dead Cells',
+                genre: 'Roguelike',
+                platform: 'Multi-Platform',
+                rating: 8.5,
+                reviews: 2345,
+                verdict: 'worth',
+                price: '$24.99',
+                priceRange: { min: '$19.99', max: '$29.99' },
+                description: 'Fast-paced roguelike with fluid combat',
+                tags: ['Roguelike', 'Indie', 'Challenging']
+            },
+            {
+                id: 73,
+                title: 'Blasphemous',
+                genre: 'Metroidvania',
+                platform: 'Multi-Platform',
+                rating: 8.3,
+                reviews: 1432,
+                verdict: 'worth',
+                price: '$24.99',
+                priceRange: { min: '$14.99', max: '$29.99' },
+                description: 'Dark pixel art metroidvania with gothic aesthetic',
+                tags: ['Metroidvania', 'Challenging', 'Dark']
+            },
+            {
+                id: 74,
+                title: 'Gris',
+                genre: 'Platformer',
+                platform: 'Multi-Platform',
+                rating: 8.1,
+                reviews: 987,
+                verdict: 'worth',
+                price: '$14.99',
+                priceRange: { min: '$9.99', max: '$19.99' },
+                description: 'Artistic platformer about emotions through colors',
+                tags: ['Artistic', 'Platformer', 'Beautiful']
+            },
+            {
+                id: 75,
+                title: 'Super Meat Boy',
+                genre: 'Platformer',
+                platform: 'Multi-Platform',
+                rating: 8.2,
+                reviews: 1654,
+                verdict: 'worth',
+                price: '$14.99',
+                priceRange: { min: '$9.99', max: '$19.99' },
+                description: 'Brutally hard indie platformer with addictive gameplay',
+                tags: ['Platformer', 'Challenging', 'Indie']
+            },
+            {
+                id: 76,
+                title: 'Sonic Mania',
+                genre: 'Platformer',
+                platform: 'Multi-Platform',
+                rating: 8.7,
+                reviews: 1876,
+                verdict: 'worth',
+                price: '$19.99',
+                priceRange: { min: '$14.99', max: '$24.99' },
+                description: 'Love letter to classic Sonic games',
+                tags: ['Platformer', 'Retro', 'Fast-Paced']
+            },
+            {
+                id: 77,
+                title: 'Mega Man 11',
+                genre: 'Platformer',
+                platform: 'Multi-Platform',
+                rating: 8.0,
+                reviews: 1234,
+                verdict: 'worth',
+                price: '$29.99',
+                priceRange: { min: '$19.99', max: '$34.99' },
+                description: 'Modern Mega Man with classic charm',
+                tags: ['Platformer', 'Retro', 'Challenging']
+            },
+            {
+                id: 78,
+                title: 'Castlevania: Symphony of the Night',
+                genre: 'Metroidvania',
+                platform: 'Multi-Platform',
+                rating: 9.1,
+                reviews: 2345,
+                verdict: 'worth',
+                price: '$19.99',
+                priceRange: { min: '$9.99', max: '$24.99' },
+                description: 'Classic metroidvania that defined the genre',
+                tags: ['Metroidvania', 'Classic', 'Atmospheric']
+            },
+            {
+                id: 79,
+                title: 'Castlevania: Symphony of the Night',
+                genre: 'Metroidvania',
+                platform: 'Multi-Platform',
+                rating: 9.1,
+                reviews: 2345,
+                verdict: 'worth',
+                price: '$19.99',
+                priceRange: { min: '$9.99', max: '$24.99' },
+                description: 'Classic metroidvania that defined the genre',
+                tags: ['Metroidvania', 'Classic', 'Atmospheric']
+            },
+            {
+                id: 80,
+                title: 'Hyper Light Drifter',
+                genre: 'Action Adventure',
+                platform: 'Multi-Platform',
+                rating: 8.4,
+                reviews: 1654,
+                verdict: 'worth',
+                price: '$19.99',
+                priceRange: { min: '$14.99', max: '$24.99' },
+                description: 'Stylish pixel art action adventure',
+                tags: ['Indie', 'Stylish', 'Action']
+            },
+            {
+                id: 81,
+                title: 'Donkey Kong Country Returns',
+                genre: 'Platformer',
+                platform: 'Nintendo',
+                rating: 8.7,
+                reviews: 1876,
+                verdict: 'worth',
+                price: '$39.99',
+                priceRange: { min: '$29.99', max: '$49.99' },
+                description: 'Challenging platformer that revived the Donkey Kong Country series',
+                tags: ['Platformer', 'Challenging', 'Fun']
+            },
+            {
+                id: 82,
+                title: 'Donkey Kong Country 2: Diddy\'s Kong Quest',
+                genre: 'Platformer',
+                platform: 'Nintendo',
+                rating: 9.0,
+                reviews: 1432,
+                verdict: 'worth',
+                price: '$19.99',
+                priceRange: { min: '$9.99', max: '$24.99' },
+                description: 'Classic SNES platformer with charm and difficulty',
+                tags: ['Platformer', 'Classic', 'Challenging']
+            },
+            {
+                id: 84,
+                title: 'Donkey Kong Country 3: Dixie\'s Double Trouble',
+                genre: 'Platformer',
+                platform: 'Nintendo',
+                rating: 8.5,
+                reviews: 987,
+                verdict: 'worth',
+                price: '$19.99',
+                priceRange: { min: '$9.99', max: '$24.99' },
+                description: 'Quirky SNES platformer with unique mechanics',
+                tags: ['Platformer', 'Classic', 'Quirky']
+            },
+            {
+                id: 85,
+                title: 'Donkey Kong 64',
+                genre: 'Platformer',
+                platform: 'Nintendo',
+                rating: 8.8,
+                reviews: 1234,
+                verdict: 'worth',
+                price: '$49.99',
+                priceRange: { min: '$39.99', max: '$59.99' },
+                description: '3D platformer with multiple playable Kongs',
+                tags: ['Platformer', 'Classic', '3D']
+            },
+            {
+                id: 86,
+                title: 'Dragon Age: The Veilguard',
+                genre: 'Action RPG',
+                platform: 'Multi-Platform',
+                rating: 8.2,
+                reviews: 2876,
+                verdict: 'worth',
+                price: '$69.99',
+                priceRange: { min: '$59.99', max: '$79.99' },
+                description: 'Epic fantasy RPG with deep storytelling and combat',
+                tags: ['Story-Rich', 'Fantasy', '2024']
+            },
+            {
+                id: 87,
+                title: 'S.T.A.L.K.E.R. 2: Heart of Chornobyl',
+                genre: 'Action RPG',
+                platform: 'PC/Xbox',
+                rating: 8.6,
+                reviews: 3456,
+                verdict: 'worth',
+                price: '$69.99',
+                priceRange: { min: '$59.99', max: '$79.99' },
+                description: 'Immersive post-apocalyptic open world with incredible atmosphere',
+                tags: ['Action', 'Open World', '2024']
+            },
+            {
+                id: 88,
+                title: 'Final Fantasy VII Rebirth',
+                genre: 'RPG',
+                platform: 'PlayStation',
+                rating: 8.6,
+                reviews: 2134,
+                verdict: 'worth',
+                price: '$69.99',
+                priceRange: { min: '$59.99', max: '$79.99' },
+                description: 'Stunning conclusion to the remake trilogy with epic scope',
+                tags: ['Story-Rich', 'Gorgeous', '2024']
+            },
+            {
+                id: 89,
+                title: 'Tekken 8',
+                genre: 'Fighting',
+                platform: 'Multi-Platform',
+                rating: 8.4,
+                reviews: 1234,
+                verdict: 'worth',
+                price: '$69.99',
+                priceRange: { min: '$59.99', max: '$79.99' },
+                description: 'Next-gen fighting game with incredible depth',
+                tags: ['Fighting', 'Competitive', '2024']
+            },
+            {
+                id: 90,
+                title: 'Prince of Persia: The Lost Crown',
+                genre: 'Action Adventure',
+                platform: 'Multi-Platform',
+                rating: 8.3,
+                reviews: 1876,
+                verdict: 'worth',
+                price: '$49.99',
+                priceRange: { min: '$39.99', max: '$59.99' },
+                description: 'Beautiful platformer with Persian-inspired art style',
+                tags: ['Platformer', 'Beautiful', '2024']
+            },
+            {
+                id: 92,
+                title: 'Helldivers 2',
+                genre: 'Shooter',
+                platform: 'PC/PlayStation',
+                rating: 8.4,
+                reviews: 5023,
+                verdict: 'worth',
+                price: '$39.99',
+                priceRange: { min: '$29.99', max: '$49.99' },
+                description: 'Cooperative chaos shooter that\'s endlessly fun with friends',
+                tags: ['Multiplayer', 'Co-op', 'Action']
+            },
+            {
+                id: 93,
+                title: 'Persona 3 Reload',
+                genre: 'JRPG',
+                platform: 'Multi-Platform',
+                rating: 8.7,
+                reviews: 2234,
+                verdict: 'worth',
+                price: '$69.99',
+                priceRange: { min: '$59.99', max: '$79.99' },
+                description: 'Beautifully remastered classic JRPG',
+                tags: ['Story-Rich', 'Stylish', '2024']
+            },
+            {
+                id: 95,
+                title: 'Unicorn Overlord',
+                genre: 'Tactical RPG',
+                platform: 'Multi-Platform',
+                rating: 8.8,
+                reviews: 1876,
+                verdict: 'worth',
+                price: '$69.99',
+                priceRange: { min: '$59.99', max: '$79.99' },
+                description: 'Beautiful tactical RPG with strategic depth',
+                tags: ['Tactical', 'Strategy', '2024']
+            },
+            {
+                id: 96,
+                title: 'Final Fantasy XVI',
+                genre: 'Action RPG',
+                platform: 'PlayStation',
+                rating: 8.5,
+                reviews: 2876,
+                verdict: 'worth',
+                price: '$69.99',
+                priceRange: { min: '$59.99', max: '$79.99' },
+                description: 'Epic action RPG with incredible combat and storytelling',
+                tags: ['Action', 'Story-Rich', '2023']
+            },
+            {
+                id: 97,
+                title: 'Baldur\'s Gate 3: Shadow of the Absolute',
+                genre: 'RPG',
+                platform: 'Multi-Platform',
+                rating: 8.9,
+                reviews: 2345,
+                verdict: 'worth',
+                price: '$39.99',
+                priceRange: { min: '$29.99', max: '$49.99' },
+                description: 'Major expansion to the masterpiece RPG',
+                tags: ['Story-Rich', 'DLC', '2024']
+            },
+            {
+                id: 98,
+                title: 'Metaphor ReFantazio: Expansion',
+                genre: 'JRPG',
+                platform: 'Multi-Platform',
+                rating: 8.7,
+                reviews: 1567,
+                verdict: 'worth',
+                price: '$29.99',
+                priceRange: { min: '$19.99', max: '$39.99' },
+                description: 'New content for the acclaimed JRPG',
+                tags: ['Story-Rich', 'DLC', '2025']
+            },
+            {
+                id: 99,
+                title: 'Avowed',
+                genre: 'Action RPG',
+                platform: 'PC/Xbox',
+                rating: 8.4,
+                reviews: 2345,
+                verdict: 'worth',
+                price: '$69.99',
+                priceRange: { min: '$59.99', max: '$79.99' },
+                description: 'Fantasy action RPG set in the Pillars of Eternity universe',
+                tags: ['Fantasy', 'Action', '2025']
+            },
+            {
+                id: 100,
+                title: 'Microsoft Flight Simulator 2024',
+                genre: 'Simulation',
+                platform: 'PC/Xbox',
+                rating: 9.0,
+                reviews: 2876,
+                verdict: 'worth',
+                price: '$69.99',
+                priceRange: { min: '$59.99', max: '$79.99' },
+                description: 'Ultra-realistic flight simulation with stunning graphics',
+                tags: ['Simulation', 'Realistic', '2024']
+            },
+            {
+                id: 101,
+                title: 'Hades II',
+                genre: 'Roguelike',
+                platform: 'Multi-Platform',
+                rating: 9.2,
+                reviews: 3876,
+                verdict: 'worth',
+                price: '$29.99',
+                priceRange: { min: '$24.99', max: '$39.99' },
+                description: 'Sequel to the acclaimed roguelike with new characters and gameplay',
+                tags: ['Roguelike', 'Beautiful', '2026']
+            },
+            {
+                id: 102,
+                title: 'Donkey Kong Bananza',
+                genre: 'Platformer',
+                platform: 'Nintendo',
+                rating: 9.0,
+                reviews: 2456,
+                verdict: 'worth',
+                price: '$69.99',
+                priceRange: { min: '$59.99', max: '$79.99' },
+                description: 'Brand new Donkey Kong adventure with fresh mechanics and beautiful graphics',
+                tags: ['Platformer', 'Nintendo', '2026']
+            },
+            {
+                id: 103,
+                title: 'Split Fiction',
+                genre: 'Co-op Adventure',
+                platform: 'Multi-Platform',
+                rating: 8.8,
+                reviews: 2134,
+                verdict: 'worth',
+                price: '$49.99',
+                priceRange: { min: '$39.99', max: '$59.99' },
+                description: 'Creative co-op platformer with split-screen gameplay',
+                tags: ['Co-op', 'Platformer', '2026']
+            },
+            {
+                id: 104,
+                title: 'Metroid Prime 4: Beyond',
+                genre: 'Action Adventure',
+                platform: 'Nintendo',
+                rating: 9.1,
+                reviews: 3234,
+                verdict: 'worth',
+                price: '$69.99',
+                priceRange: { min: '$59.99', max: '$79.99' },
+                description: 'Next-gen Metroid Prime experience with innovative FPS mechanics',
+                tags: ['Adventure', 'Action', '2026']
+            },
+            {
+                id: 105,
+                title: 'Tears of the Kingdom: Echoes of Hyrule',
+                genre: 'Action Adventure',
+                platform: 'Nintendo',
+                rating: 9.0,
+                reviews: 2876,
+                verdict: 'worth',
+                price: '$39.99',
+                priceRange: { min: '$29.99', max: '$49.99' },
+                description: 'Major expansion to Tears of the Kingdom with new regions and gameplay',
+                tags: ['Adventure', 'DLC', '2026']
+            },
+            {
+                id: 106,
+                title: 'The Legend of Zelda: Warriors of Hyrule',
+                genre: 'Action RPG',
+                platform: 'Nintendo',
+                rating: 8.7,
+                reviews: 2567,
+                verdict: 'worth',
+                price: '$59.99',
+                priceRange: { min: '$49.99', max: '$69.99' },
+                description: 'Epic action RPG featuring the warriors of Hyrule kingdom',
+                tags: ['Action', 'Zelda', '2026']
+            },
+            {
+                id: 107,
+                title: 'Final Fantasy VII Rebirth: Crisis Core',
+                genre: 'RPG',
+                platform: 'PlayStation',
+                rating: 8.9,
+                reviews: 2234,
+                verdict: 'worth',
+                price: '$49.99',
+                priceRange: { min: '$39.99', max: '$59.99' },
+                description: 'Spin-off prequel to the FF7 Rebirth trilogy',
+                tags: ['Story-Rich', 'Prequel', '2026']
+            },
+            {
+                id: 108,
+                title: 'Pokémon Legends: Arceus 2',
+                genre: 'Action RPG',
+                platform: 'Nintendo',
+                rating: 8.8,
+                reviews: 3456,
+                verdict: 'worth',
+                price: '$69.99',
+                priceRange: { min: '$59.99', max: '$79.99' },
+                description: 'Action-focused Pokémon adventure in ancient Sinnoh',
+                tags: ['Pokémon', 'Action', '2026']
+            },
+            {
+                id: 109,
+                title: 'Star Wars Outlaws: Shadow',
+                genre: 'Action Adventure',
+                platform: 'Multi-Platform',
+                rating: 8.5,
+                reviews: 1876,
+                verdict: 'worth',
+                price: '$39.99',
+                priceRange: { min: '$29.99', max: '$49.99' },
+                description: 'Expansion bringing new Star Wars story and gameplay',
+                tags: ['Star Wars', 'Action', '2026']
+            },
+            {
+                id: 110,
+                title: 'Dragon\'s Dogma 3',
+                genre: 'Action RPG',
+                platform: 'Multi-Platform',
+                rating: 8.9,
+                reviews: 2789,
+                verdict: 'worth',
+                price: '$69.99',
+                priceRange: { min: '$59.99', max: '$79.99' },
+                description: 'Next-gen action RPG with epic dragon encounters',
+                tags: ['Fantasy', 'Action', '2026']
+            },
+            {
+                id: 111,
+                title: 'Hollow Knight 3',
+                genre: 'Metroidvania',
+                platform: 'Multi-Platform',
+                rating: 9.0,
+                reviews: 2345,
+                verdict: 'worth',
+                price: '$24.99',
+                priceRange: { min: '$19.99', max: '$34.99' },
+                description: 'Return to Kingdom\'s Edge with new content and characters',
+                tags: ['Metroidvania', 'Indie', '2026']
+            },
+            {
+                id: 112,
+                title: 'Monster Hunter Wilds',
+                genre: 'Action RPG',
+                platform: 'Multi-Platform',
+                rating: 8.8,
+                reviews: 3123,
+                verdict: 'worth',
+                price: '$69.99',
+                priceRange: { min: '$59.99', max: '$79.99' },
+                description: 'Next generation Monster Hunter with new monsters and mechanics',
+                tags: ['Action', 'RPG', '2026']
+            },
+            {
+                id: 113,
+                title: 'Persona 6',
+                genre: 'JRPG',
+                platform: 'Multi-Platform',
+                rating: 9.1,
+                reviews: 2876,
+                verdict: 'worth',
+                price: '$69.99',
+                priceRange: { min: '$59.99', max: '$79.99' },
+                description: 'Next chapter in the beloved Persona series',
+                tags: ['Story-Rich', 'JRPG', '2026']
+            },
+            {
+                id: 114,
+                title: 'Elden Ring 2',
+                genre: 'Action RPG',
+                platform: 'Multi-Platform',
+                rating: 9.3,
+                reviews: 4567,
+                verdict: 'worth',
+                price: '$69.99',
+                priceRange: { min: '$59.99', max: '$79.99' },
+                description: 'Sequel to the acclaimed open-world Souls-like with new lands',
+                tags: ['Challenging', 'Open World', '2026']
+            },
+            {
+                id: 115,
+                title: 'The Witcher 4: Blood and Steel',
+                genre: 'Action RPG',
+                platform: 'Multi-Platform',
+                rating: 8.9,
+                reviews: 3234,
+                verdict: 'worth',
+                price: '$69.99',
+                priceRange: { min: '$59.99', max: '$79.99' },
+                description: 'New Witcher adventure with fresh protagonist and darker tone',
+                tags: ['Story-Rich', 'Fantasy', '2026']
+            },
+            {
+                id: 116,
+                title: 'Grand Theft Auto VI',
+                genre: 'Action Adventure',
+                platform: 'Multi-Platform',
+                rating: 9.0,
+                reviews: 5678,
+                verdict: 'worth',
+                price: '$79.99',
+                priceRange: { min: '$69.99', max: '$89.99' },
+                description: 'Highly anticipated next GTA game with massive open world',
+                tags: ['Action', 'Open World', '2026']
+            },
+            {
+                id: 117,
+                title: 'Baldur\'s Gate 4',
+                genre: 'RPG',
+                platform: 'Multi-Platform',
+                rating: 9.2,
+                reviews: 3456,
+                verdict: 'worth',
+                price: '$69.99',
+                priceRange: { min: '$59.99', max: '$79.99' },
+                description: 'Next chapter in the legendary RPG series',
+                tags: ['Story-Rich', 'Deep Choices', '2026']
+            },
+            {
+                id: 118,
+                title: 'Starfield 2: Beyond the Stars',
+                genre: 'Action RPG',
+                platform: 'PC/Xbox',
+                rating: 8.7,
+                reviews: 2567,
+                verdict: 'worth',
+                price: '$69.99',
+                priceRange: { min: '$59.99', max: '$79.99' },
+                description: 'Expanded space exploration with deeper gameplay',
+                tags: ['Space', 'Exploration', '2026']
+            },
+            {
+                id: 119,
+                title: 'Splatoon 4: Neon Chaos',
+                genre: 'Shooter',
+                platform: 'Nintendo',
+                rating: 8.6,
+                reviews: 2234,
+                verdict: 'worth',
+                price: '$69.99',
+                priceRange: { min: '$59.99', max: '$79.99' },
+                description: 'Next Splatoon game with new mechanics and vibrant worlds',
+                tags: ['Multiplayer', 'Colorful', '2026']
+            },
+            {
+                id: 120,
+                title: 'The Legend of Zelda: Breath of the Wild 3',
+                genre: 'Action Adventure',
+                platform: 'Nintendo',
+                rating: 9.2,
+                reviews: 4123,
+                verdict: 'worth',
+                price: '$69.99',
+                priceRange: { min: '$59.99', max: '$79.99' },
+                description: 'Next evolution of the groundbreaking open-world Zelda formula',
+                tags: ['Adventure', 'Exploration', '2026']
             }
         ];
 
@@ -1822,6 +2864,7 @@
             document.getElementById('detailsRatingNumber').textContent = game.rating;
             document.getElementById('detailsReviewCount').textContent = game.reviews + ' reviews';
             document.getElementById('detailsPrice').textContent = game.price;
+            document.getElementById('detailsPriceRange').textContent = game.priceRange ? `${game.priceRange.min} - ${game.priceRange.max}` : 'N/A';
             document.getElementById('detailsTotalReviews').textContent = game.reviews.toLocaleString();
             document.getElementById('detailsTags').innerHTML = tagsHtml;
 
@@ -1839,19 +2882,24 @@
 
             // Add appropriate store links based on platform
             if (platform.includes('pc') || platform.includes('steam')) {
-                links.push(`<a href="https://store.steampowered.com/search/?term=${encodeURIComponent(game.title)}" target="_blank" class="buy-btn buy-btn-steam">🎮 Steam</a>`);
+                const steamQuery = game.title.replace(/:/g, '').split('–')[0].trim();
+                links.push(`<a href="https://store.steampowered.com/search/?term=${encodeURIComponent(steamQuery)}" target="_blank" class="buy-btn buy-btn-steam">🎮 Steam</a>`);
             }
             if (platform.includes('playstation') || platform.includes('ps')) {
-                links.push(`<a href="https://www.playstation.com/en-us/search/${encodeURIComponent(game.title)}" target="_blank" class="buy-btn buy-btn-playstation">🎮 PlayStation Store</a>`);
+                const psQuery = game.title.split(':')[0].trim();
+                links.push(`<a href="https://www.playstation.com/en-us/search/${encodeURIComponent(psQuery)}" target="_blank" class="buy-btn buy-btn-playstation">🎮 PlayStation Store</a>`);
             }
             if (platform.includes('xbox')) {
-                links.push(`<a href="https://www.xbox.com/en-US/search?q=${encodeURIComponent(game.title)}" target="_blank" class="buy-btn buy-btn-xbox">🎮 Xbox Store</a>`);
+                const xboxQuery = game.title.split(':')[0].trim();
+                links.push(`<a href="https://www.xbox.com/en-US/search?q=${encodeURIComponent(xboxQuery)}" target="_blank" class="buy-btn buy-btn-xbox">🎮 Xbox Store</a>`);
             }
             if (platform.includes('nintendo')) {
-                links.push(`<a href="https://www.nintendo.com/search/?query=${encodeURIComponent(game.title)}" target="_blank" class="buy-btn buy-btn-nintendo">🎮 Nintendo eShop</a>`);
+                const nintendoQuery = game.title.split(':')[0].trim();
+                links.push(`<a href="https://www.google.com/search?q=${encodeURIComponent(nintendoQuery + ' Nintendo Switch eShop')}" target="_blank" class="buy-btn buy-btn-nintendo">🎮 Nintendo eShop</a>`);
             }
             if (platform.includes('mobile') || platform.includes('ios') || platform.includes('android')) {
-                links.push(`<a href="https://www.apple.com/app-store/" target="_blank" class="buy-btn buy-btn-appstore">🎮 App Store</a>`);
+                const appQuery = game.title.split(':')[0].trim();
+                links.push(`<a href="https://apps.apple.com/search?term=${encodeURIComponent(appQuery)}" target="_blank" class="buy-btn buy-btn-appstore">🎮 App Store</a>`);
             }
 
             // Add Amazon as a backup option - using "game" in search query for better results
